@@ -13,31 +13,31 @@ An example of WeDeploy Message Queue.
 ## API Endpoints
 
 * [Queue](#queue)
-    * [Create Queue](#create-queue)
-    * [Get a Queue](#get-a-queue)
-    * [Delete a Queue](#delete-a-queue)
-    * [List all Queues](#list-all-queues)
+  * [Create Queue](#create-queue)
+  * [Get a Queue](#get-a-queue)
+  * [Delete a Queue](#delete-a-queue)
+  * [List all Queues](#list-all-queues)
 * [Message](#message)
   * [Send new Message to a Queue](#send-new-message-to-a-queue)
   * [Receive next Message from a Queue](#receive-next-message-from-a-queue)
-  * [Change Message visibility](#change-message-visibility)
+  * [Update Message](#update-message)
 
 ## Queue
 
 ### Create Queue
 
 ```http
-POST /queues/:qname
+POST /queues/:name
 ```
 
 ##### Parameters
 
-| Name          | Type    |     Required    | Options   |
-| ------------- | ------- |  -------------  | --------- |
-| qname         | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
-| vt            | number  |                 | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30.  |
-| delay         | number  |                 | The time in seconds that the delivery of all new messages in the queue will be delayed. Allowed values: 0-9999999. Default: 0. |
-| maxsize       | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536. Default: 65536. |
+| Name            | Type    |     Required    | Options   |
+| --------------  | ------- |  -------------  | --------- |
+| name            | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
+| delayAfterRead  | number  |                 | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30.  |
+| delayBeforeRead | number  |                 | The time in seconds that the delivery of all new messages in the queue will be delayed. Allowed values: 0-9999999. Default: 0. |
+| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536. Default: 65536. |
 
 ##### Request
 
@@ -45,9 +45,9 @@ POST /queues/:qname
 curl -X "POST" "/queues/myqueue" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
-  "vt": 30,
-  "delay": 0,
-  "maxsize": 2048
+  "delayAfterRead": 30,
+  "delayBeforeRead": 0,
+  "maxSize": 2048
 }'
 ```
 
@@ -62,14 +62,14 @@ curl -X "POST" "/queues/myqueue" \
 ### Get a Queue
 
 ```http
-GET /queues/:qname
+GET /queues/:name
 ```
 
 ##### Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
-| qname         | string  |  ✓              | The Queue name.  |
+| name          | string  |  ✓              | The Queue name.  |
 
 ##### Request
 
@@ -81,29 +81,29 @@ curl "/queues/myqueue"
 
 ```js
 {
-  "vt": 30,
-  "delay": 0,
-  "maxsize": 2048,
-  "totalrecv": 1,
-  "totalsent": 1,
-  "created": 1526062621,
-  "modified": 1526062621,
-  "msgs": 1,
-  "hiddenmsgs": 0
+  "createdAt": 1526067241,
+  "delayAfterRead": 30,
+  "delayBeforeRead": 0,
+  "maxSize": 2048,
+  "modifiedAt": 1526067241,
+  "total": 0,
+  "totalHidden": 0,
+  "totalReceived": 0,
+  "totalSent": 0
 }
 ```
 
 ### Delete a Queue
 
 ```http
-DELETE /queues/:qname
+DELETE /queues/:name
 ```
 
 ##### Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
-| qname         | string  |  ✓              | The Queue name.  |
+| name          | string  |  ✓              | The Queue name.  |
 
 ##### Request
 
@@ -146,7 +146,7 @@ curl "/queues"
 ### Send new Message to a Queue
 
 ```http
-POST /messages/:qname
+POST /messages/:name
 ```
 
 ##### Request
@@ -170,49 +170,49 @@ curl -X "POST" "/messages/myqueue" \
 ### Receive next Message from a Queue
 
 ```http
-GET /messages/:qname
+GET /messages/:name
 ```
 
 ##### Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
-| vt            | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
+| delayBeforeRead            | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
 
 ##### Request
 
 ```bash
-curl "/messages/myqueue?vt=30"
+curl "/messages/myqueue?delayBeforeRead=30"
 ```
 
 ##### Response `200 OK`
 
 ```js
 {
-  "id": "f0y01ynxe3zAcfhFt15R7ehTwMntN9Zr",
-  "message": "Hello World",
-  "rc": 2,
-  "fr": 1526063521780,
-  "sent": 1526063431732
+  "firstReceivedAt": 1526067405391,
+  "id": "f0y1oqi4m5rx73G7BGZjxqQqxBFlnl0N",
+  "message": "Blah Blah Blah",
+  "sentAt": 1526067404091,
+  "totalReceived": 1
 }
 ```
 
-### Change Message visibility
+### Update Message
 
 ```http
-PUT /message/:qname/:id
+PUT /message/:name/:id
 ```
 
 ##### Parameters
 
-| Name          | Type    |     Required    | Options   |
-| ------------- | ------- |  -------------  | --------- |
-| vt            | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
+| Name            | Type    |     Required    | Options   |
+| --------------- | ------- |  -------------  | --------- |
+| delayBeforeRead | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
 
 ##### Request
 
 ```bash
-curl -X "PUT" "/messages/myqueue/f0y01ynxe3zAcfhFt15R7ehTwMntN9Zr?vt=30"
+curl -X "PUT" "/messages/myqueue/f0y01ynxe3zAcfhFt15R7ehTwMntN9Zr?delayBeforeRead=30"
 ```
 
 ##### Response `200 OK`
@@ -222,7 +222,3 @@ curl -X "PUT" "/messages/myqueue/f0y01ynxe3zAcfhFt15R7ehTwMntN9Zr?vt=30"
   "result": 1
 }
 ```
-
-## License
-
-[BSD-3-Clause](./LICENSE.md), © Liferay, Inc.
