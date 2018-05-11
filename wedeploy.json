@@ -1,7 +1,7 @@
 {
   "id": "mq",
-  "image": "wedeploy/message-queue",
+  "image": "wedeploy/message-queue:0.0.2",
   "volumes": {
-    "data": "/data"
+    "redis": "/var/lib/redis"
   }
 }
