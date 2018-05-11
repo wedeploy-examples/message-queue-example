@@ -1,0 +1,7 @@
+{
+  "id": "mq",
+  "image": "wedeploy/message-queue",
+  "volumes": {
+    "data": "/data"
+  }
+}
