@@ -41,7 +41,7 @@ POST /queues
 ##### Request
 
 ```bash
-curl -X "POST" "/queues/myqueue" \
+curl -X "POST" "/queues" \
      -H 'Content-Type: application/json' \
      -d $'{
   "name": "myqueue",
