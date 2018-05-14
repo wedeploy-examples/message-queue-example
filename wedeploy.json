@@ -1,6 +1,6 @@
 {
   "id": "mq",
-  "image": "wedeploy/message-queue:0.0.6",
+  "image": "wedeploy/message-queue:0.0.7",
   "volumes": {
     "data": "/data"
   }
