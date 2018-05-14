@@ -26,7 +26,7 @@ An example of WeDeploy Message Queue.
 ### Create Queue
 
 ```http
-POST /queues/:name
+POST /queues
 ```
 
 ##### Parameters
