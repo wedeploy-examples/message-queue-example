@@ -26,7 +26,7 @@ An example of WeDeploy Message Queue.
 ### Create Queue
 
 ```http
-POST /queues/:name
+POST /queues
 ```
 
 ##### Parameters
@@ -44,6 +44,7 @@ POST /queues/:name
 curl -X "POST" "/queues/myqueue" \
      -H 'Content-Type: application/json' \
      -d $'{
+  "name": "myqueue",
   "delayAfterRead": 30,
   "delayBeforeRead": 0,
   "maxSize": 2048
