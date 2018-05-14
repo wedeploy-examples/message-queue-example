@@ -18,9 +18,8 @@ An example of WeDeploy Message Queue.
   * [Delete a Queue](#delete-a-queue)
   * [List all Queues](#list-all-queues)
 * [Message](#message)
-  * [Send new Message to a Queue](#send-new-message-to-a-queue)
-  * [Receive next Message from a Queue](#receive-next-message-from-a-queue)
-  * [Update Message](#update-message)
+  * [Send new message to a Queue](#send-new-message-to-a-queue)
+  * [Pop next message from a Queue](#receive-next-message-from-a-queue)
 
 ## Queue
 
@@ -43,7 +42,7 @@ POST /queues/:name
 
 ```bash
 curl -X "POST" "/queues/myqueue" \
-     -H 'Content-Type: application/json; charset=utf-8' \
+     -H 'Content-Type: application/json' \
      -d $'{
   "delayAfterRead": 30,
   "delayBeforeRead": 0,
@@ -65,7 +64,7 @@ curl -X "POST" "/queues/myqueue" \
 GET /queues/:name
 ```
 
-##### Parameters
+##### Query Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
@@ -99,7 +98,7 @@ curl "/queues/myqueue"
 DELETE /queues/:name
 ```
 
-##### Parameters
+##### Query Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
@@ -143,19 +142,28 @@ curl "/queues"
 
 ## Message
 
-### Send new Message to a Queue
+### Send new message to a Queue
 
 ```http
 POST /messages/:name
 ```
 
+##### Body Parameters
+
+| Name            | Type    |     Required    | Options   |
+| --------------  | ------- |  -------------  | --------- |
+| name            | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
+| message  | string  |                 | The stringified content of the message   |
+| delayBeforeRead | number  |                 | The time in seconds that the delivery of the message will be delayed. Allowed values: 0-9999999 (around 115 days). Default: 0. |
+
 ##### Request
 
 ```bash
 curl -X "POST" "/messages/myqueue" \
-     -H 'Content-Type: application/json; charset=utf-8' \
+     -H 'Content-Type: application/json' \
      -d $'{
-  "message": "Hello World"
+  "message": "Hello World",
+  "delayBeforeRead": 10
 }'
 ```
 
@@ -167,22 +175,24 @@ curl -X "POST" "/messages/myqueue" \
 }
 ```
 
-### Receive next Message from a Queue
+### Pop next message from a Queue
 
 ```http
 GET /messages/:name
 ```
 
-##### Parameters
+##### Query Parameters
 
 | Name          | Type    |     Required    | Options   |
 | ------------- | ------- |  -------------  | --------- |
-| delayBeforeRead            | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
+| name          | string  |  ✓              | The Queue name.  |
+| keep          | boolean  |                | If true, the message will not be popped (deleted). Default: false  |
+| delayAfterRead            | string  |                | Only applicable if keep = true. The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
 
 ##### Request
 
 ```bash
-curl "/messages/myqueue?delayBeforeRead=30"
+curl "/messages/myqueue?keep=true&delayAfterRead=30"
 ```
 
 ##### Response `200 OK`
@@ -194,31 +204,5 @@ curl "/messages/myqueue?delayBeforeRead=30"
   "message": "Blah Blah Blah",
   "sentAt": 1526067404091,
   "totalReceived": 1
-}
-```
-
-### Update Message
-
-```http
-PUT /message/:name/:id
-```
-
-##### Parameters
-
-| Name            | Type    |     Required    | Options   |
-| --------------- | ------- |  -------------  | --------- |
-| delayBeforeRead | string  |  ✓              | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
-
-##### Request
-
-```bash
-curl -X "PUT" "/messages/myqueue/f0y01ynxe3zAcfhFt15R7ehTwMntN9Zr?delayBeforeRead=30"
-```
-
-##### Response `200 OK`
-
-```js
-{
-  "result": 1
 }
 ```
