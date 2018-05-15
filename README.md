@@ -184,11 +184,12 @@ GET /messages/:name
 
 ##### Query Parameters
 
-| Name          | Type    |     Required    | Options   |
-| ------------- | ------- |  -------------  | --------- |
-| name          | string  |  ✓              | The Queue name.  |
-| keep          | boolean  |                | If true, the message will not be popped (deleted). Default: false  |
-| delayAfterRead            | string  |                | Only applicable if keep = true. The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
+| Name             | Type    |     Required   | Options          |
+| -------------    | ------- |  ------------- | ---------        |
+| name             | string  |  ✓             | The Queue name.  |
+| keep             | boolean |                | If true, the message will not be popped (deleted). Default: false  |
+| delayAfterRead   | string  |                | Only applicable if keep = true. The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30 |
+| total            | number  |                 | Pops the total number of messages from the queue |
 
 ##### Request
 
@@ -200,10 +201,14 @@ curl "/messages/myqueue?keep=true&delayAfterRead=30"
 
 ```js
 {
-  "firstReceivedAt": 1526067405391,
-  "id": "f0y1oqi4m5rx73G7BGZjxqQqxBFlnl0N",
-  "message": "Blah Blah Blah",
-  "sentAt": 1526067404091,
-  "totalReceived": 1
+  "messages": [
+    {
+      "firstReceivedAt": 1526067405391,
+      "id": "f0y1oqi4m5rx73G7BGZjxqQqxBFlnl0N",
+      "message": "Blah Blah Blah",
+      "sentAt": 1526067404091,
+      "totalReceived": 1
+    }
+  ]
 }
 ```
