@@ -194,7 +194,7 @@ GET /messages/:name
 ##### Request
 
 ```bash
-curl "/messages/myqueue?keep=true&delayAfterRead=30"
+curl "/messages/myqueue?keep=true"
 ```
 
 ##### Response `200 OK`
