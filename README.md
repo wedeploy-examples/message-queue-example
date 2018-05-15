@@ -19,7 +19,7 @@ An example of WeDeploy Message Queue.
   * [List all Queues](#list-all-queues)
 * [Message](#message)
   * [Send new message to a Queue](#send-new-message-to-a-queue)
-  * [Pop next message from a Queue](#receive-next-message-from-a-queue)
+  * [Pop next message from a Queue](#pop-next-message-from-a-queue)
 
 ## Queue
 
