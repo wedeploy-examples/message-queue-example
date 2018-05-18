@@ -1,6 +1,8 @@
 {
   "id": "mq",
   "image": "wedeploy/message-queue:0.0.11",
+  "cpu": 3,
+  "memory": 4096,
   "volumes": {
     "data": "/data"
   }
