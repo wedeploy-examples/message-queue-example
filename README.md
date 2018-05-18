@@ -17,6 +17,7 @@ An example of WeDeploy Message Queue.
   * [Get a Queue](#get-a-queue)
   * [Delete a Queue](#delete-a-queue)
   * [List all Queues](#list-all-queues)
+  * [Set attributes of Queues](#set-attributes-of-queues)
 * [Message](#message)
   * [Send new message to a Queue](#send-new-message-to-a-queue)
   * [Pop next message from a Queue](#pop-next-message-from-a-queue)
@@ -47,7 +48,7 @@ curl -X "POST" "/queues" \
   "name": "myqueue",
   "delayAfterRead": 30,
   "delayBeforeRead": 0,
-  "maxSize": 2048
+  "maxSize": 66536
 }'
 ```
 
@@ -138,6 +139,47 @@ curl "/queues"
   "queues": [
     "myqueue"
   ]
+}
+```
+
+### Set attributes of Queues
+
+```http
+PATCH /queues/:name
+```
+
+##### Parameters
+
+| Name            | Type    |     Required    | Options   |
+| --------------  | ------- |  -------------  | --------- |
+| name            | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
+| delayAfterRead  | number  |                 | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999.  |
+| delayBeforeRead | number  |                 | The time in seconds that the delivery of all new messages in the queue will be delayed. Allowed values: 0-9999999.  |
+| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536. |
+
+##### Request
+
+```bash
+curl -X "PATCH" "/queues/myqueue" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "maxSize": "66536"
+}'
+```
+
+##### Response `200 OK`
+
+```js
+{
+  "createdAt": 1526067241,
+  "delayAfterRead": 30,
+  "delayBeforeRead": 0,
+  "maxSize": 66536,
+  "modifiedAt": 1526067241,
+  "total": 0,
+  "totalHidden": 0,
+  "totalReceived": 0,
+  "totalSent": 0
 }
 ```
 
