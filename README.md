@@ -37,7 +37,7 @@ POST /queues
 | name            | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
 | delayAfterRead  | number  |                 | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999. Default: 30.  |
 | delayBeforeRead | number  |                 | The time in seconds that the delivery of all new messages in the queue will be delayed. Allowed values: 0-9999999. Default: 0. |
-| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536. Default: 65536. |
+| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536, and -1 (for unlimited size). Default: 65536. |
 
 ##### Request
 
@@ -155,7 +155,7 @@ PATCH /queues/:name
 | name            | string  |  ✓              | The Queue name. Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed. |
 | delayAfterRead  | number  |                 | The length of time, in seconds, that a message received from a queue will be invisible to other receiving components when they ask to receive messages. Allowed values: 0-9999999.  |
 | delayBeforeRead | number  |                 | The time in seconds that the delivery of all new messages in the queue will be delayed. Allowed values: 0-9999999.  |
-| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536. |
+| maxSize         | string  |                 | The maximum message size in bytes. Allowed values: 1024-65536, and -1 (for unlimited size). |
 
 ##### Request
 
